@@ -1,44 +1,73 @@
 
 parser = require './parser.coffee'
 
-validateObject = (map, node) ->
-	keys = node.value
-	for key in keys
-		if key.type is 'string'
-			# check if map has this key
-			if map[key.value] is undefined
-				return false
-		else if key.type is 'pair'
-			# check if map has this key
-			if map[key.key] is undefined
-				return false
-			# check value of pair is a string, check the type of the map's value
-			if key.value.type is 'string'
-				return typeof map[key.key] is key.value.value
+stack = []
 
-			# check if value of this key is valid
-			if validate(map[key.key], key.value) isnt true
+validateObject = (map, node) ->
+	childNodes = node.value
+	for child in childNodes
+		if child.type is 'string'
+			
+			# check if map has this child
+			stack.push(child.key)
+			if map[child.value] is undefined
 				return false
+			else
+				stack.pop()
+
+		else if child.type is 'pair'
+			
+			# check if map has this child
+			stack.push(child.key)
+			if map[child.key] is undefined
+				return false
+			else stack.pop()
+			
+			# check value of pair is a string, check the type of the map's value
+			if child.value.type is 'string'
+				stack.push(child.key)
+				if typeof map[child.key] is child.value.value
+					stack.pop()
+					return true
+				else return false
+			
+			# check if value of this key is valid
+			stack.push(child.key)
+			if validate(map[child.key], child.value) isnt true
+				return false
+			else
+				stack.pop()
 	return true
 	
 
 validateArray = (array, node) ->
-	nodeValues = node.value
-	if nodeValues.length is 0
+	children = node.value
+	
+	if children.length is 0
 		return true
-	else if nodeValues.length is 1
+
+	else if children.length is 1	
 		# check if every element of the array matches the node
-		for element in array
-			if validate(element, nodeValues[0]) isnt true
+		for element, index in array
+			stack.push(index)
+			if validate(element, children[0]) isnt true
 				return false
+			else
+				stack.pop()
+
 		return true
-	else
-		# in this case (nodeValues.length > 1), the array must exactly match nodeValues
-		if array.length isnt nodeValues.length
+	
+	else	
+		# in this case (children.length > 1), the array must exactly match children
+		if array.length isnt children.length
 			return false
 		for element, index in array
-			if validate(element, nodeValues[index]) isnt true
+			stack.push(index)
+			if validate(element, children[index]) isnt true
 				return false
+			else
+				stack.pop()
+
 		return true
 		
 
@@ -54,4 +83,8 @@ validate = (input, node) ->
 		return false
 
 module.exports = (input, query) ->
-	validate(input, parser(query))
+	stack = []
+	return  {
+		isValid: validate(input, parser(query))
+		stack: stack
+	}
