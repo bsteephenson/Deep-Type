@@ -62,7 +62,7 @@ describe 'checker', () ->
 		expect(output.isValid).to.equal(false)
 		expect(output.stack).to.deep.equal([1])
 
-	it 'should return a function if only the query is given', () ->
+	it 'should return a function if only the query is given (currying)', () ->
 		query = checker('{key}')
 		expect(query instanceof Function).to.equal(true)
 		expect(query({key: 'value'}).isValid).to.equal(true)
