@@ -22,15 +22,7 @@ validateObject = (map, node) ->
 			if map[child.key] is undefined
 				return false
 			else stack.pop()
-			
-			# check value of pair is a string, check the type of the map's value
-			if child.value.type is 'string'
-				stack.push(child.key)
-				if typeof map[child.key] is child.value.value
-					stack.pop()
-					return true
-				else return false
-			
+						
 			# check if value of this key is valid
 			stack.push(child.key)
 			if validate(map[child.key], child.value) isnt true
@@ -42,7 +34,7 @@ validateObject = (map, node) ->
 
 validateArray = (array, node) ->
 	children = node.value
-	
+
 	if children.length is 0
 		return true
 
@@ -69,7 +61,9 @@ validateArray = (array, node) ->
 				stack.pop()
 
 		return true
-		
+	
+validateType = (input, node) ->
+	return typeof input is node.value
 
 isObject = (input) -> (input instanceof Object and !(input instanceof Array))
 isArray = (input) -> (input instanceof Array)
@@ -79,12 +73,22 @@ validate = (input, node) ->
 		return validateObject(input, node)
 	else if node.type is 'array' and isArray(input)
 		return validateArray(input, node)
+	else if node.type is 'string'
+		return validateType(input, node)
 	else
 		return false
 
-module.exports = (input, query) ->
+module.exports = (query, input) ->
 	stack = []
-	return  {
-		isValid: validate(input, parser(query))
-		stack: stack
-	}
+
+	if input && query
+		return  {
+			isValid: validate(input, parser(query))
+			stack: stack
+		}		
+	else if query
+		return (input) ->
+			return  {
+				isValid: validate(input, parser(query))
+				stack: stack
+			}	

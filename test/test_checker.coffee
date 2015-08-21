@@ -16,7 +16,7 @@ describe 'checker', () ->
 				]
 			}
 		}
-		output = checker(val, '{ key: {inner: [ {innerInnerKey: string, anotherKey} ]} }')
+		output = checker('{ key: {inner: [ {innerInnerKey: string, anotherKey} ]} }', val)
 
 		expect(output.isValid).to.equal(true)
 
@@ -30,7 +30,7 @@ describe 'checker', () ->
 				]
 			}
 		} 
-		output = checker(val, '{ key: {inner: [ {innerInnerKey: string} ]} }')
+		output = checker('{ key: {inner: [ {innerInnerKey: string} ]} }', val)
 
 		expect(output.isValid).to.equal(false)
 		expect(output.stack).to.deep.equal(['key', 'inner', 0, 'innerInnerKey'])
@@ -49,7 +49,20 @@ describe 'checker', () ->
 				]
 			}
 		}
-		output = checker(val, '{ key: {inner: [ {innerInnerKey: string} ]} }')
+		output = checker('{ key: {inner: [ {innerInnerKey: string} ]} }', val)
 
 		expect(output.isValid).to.equal(false)
 		expect(output.stack).to.deep.equal(['key', 'inner', 1, 'innerInnerKey'])
+
+	it 'should work with an array of types', () ->
+		output = checker('[ string ]', ['element'])
+		expect(output.isValid).to.equal(true)
+
+		output = checker('[ string ]', ['element', 42])
+		expect(output.isValid).to.equal(false)
+		expect(output.stack).to.deep.equal([1])
+
+	it 'should return a function if only the query is given', () ->
+		query = checker('{key}')
+		expect(query instanceof Function).to.equal(true)
+		expect(query({key: 'value'}).isValid).to.equal(true)
