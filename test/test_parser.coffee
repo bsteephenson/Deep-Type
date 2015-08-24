@@ -1,7 +1,7 @@
 
 {expect} = require 'chai'
 
-parser = require '../parser.coffee'
+parser = require '../src/parser'
 
 
 describe 'Parser', () ->

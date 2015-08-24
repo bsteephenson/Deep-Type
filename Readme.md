@@ -1,6 +1,11 @@
-# JS GraphQL-ish Type Checker
+# Deep Type
+### JS GraphQL-ish Type Checker
 
 Use a GraphQL-esque syntax to validate Javascript objects and arrays. Also tells you where you messed up.
+
+```
+npm install deep-type
+```
 
 ## Examples
 

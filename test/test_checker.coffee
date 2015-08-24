@@ -1,5 +1,5 @@
 
-checker = require '../checker.coffee'
+checker = require '../src/checker'
 
 {expect} = require 'chai'
 

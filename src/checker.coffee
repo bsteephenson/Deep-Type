@@ -1,5 +1,5 @@
 
-parser = require './parser.coffee'
+parser = require './parser'
 
 stack = []
 
@@ -9,7 +9,7 @@ validateObject = (map, node) ->
 		if child.type is 'string'
 			
 			# check if map has this child
-			stack.push(child.key)
+			stack.push(child.value)
 			if map[child.value] is undefined
 				return false
 			else

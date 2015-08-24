@@ -1,15 +1,27 @@
 {
-  "name": "JSType",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "deep-type",
+  "version": "1.0.1",
+  "description": "a type validator for objects and arrays using GraphQL-ish queries",
+  "main": "build/checker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "prepublish": "npm run compile",
+    "compile": "gulp"
+
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Benjamin Steephenson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BSteephenson/Deep-Type.git"
+  },
   "dependencies": {
     "chai": "^3.2.0",
-    "coffee-script": "^1.9.3"
+    "coffee-script": "^1.9.3",
+    "coffeeify": "^1.1.0",
+    "gulp": "^3.9.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-rename": "^1.2.2"
   }
 }
