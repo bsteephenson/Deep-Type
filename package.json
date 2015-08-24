@@ -1,13 +1,12 @@
 {
   "name": "deep-type",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a type validator for objects and arrays using GraphQL-ish queries",
   "main": "build/checker.js",
   "scripts": {
     "test": "mocha",
     "prepublish": "npm run compile",
     "compile": "gulp"
-
   },
   "author": "Benjamin Steephenson",
   "license": "MIT",
@@ -15,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/BSteephenson/Deep-Type.git"
   },
-  "dependencies": {
+  "devDependencies": {
     "chai": "^3.2.0",
     "coffee-script": "^1.9.3",
     "coffeeify": "^1.1.0",
